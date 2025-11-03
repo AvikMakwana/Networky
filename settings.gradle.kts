@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Networky"
 include(":app")
- 
+include(":NetStat")
