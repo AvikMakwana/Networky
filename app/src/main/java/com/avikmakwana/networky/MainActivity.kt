@@ -23,6 +23,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NetworkyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    // Semantics: Use the standard Composable pattern for screen content.
                     MonitorScreen(Modifier.padding(innerPadding))
                 }
             }
@@ -59,8 +62,13 @@ fun MonitorScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        // SCALES MANDATE: Added contentDescription for accessibility compliance.
+        val statusDescription = "Current network status: ${viewState.statusText}"
+
         Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentDescription = statusDescription },
             colors = CardDefaults.cardColors(containerColor = viewState.statusColor.copy(alpha = 0.8f)),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
@@ -99,7 +107,8 @@ fun MonitorScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp),
-                enabled = viewState.statusText != "Checking Status..."
+                // CRITICAL FIX: Use the stable boolean state, not a string match.
+                enabled = !viewState.isChecking
             ) {
                 Text(if (viewState.isSocketActive) "PAUSE Monitor (Socket Active)" else "RESUME Monitor (Socket Idle)")
             }
@@ -109,7 +118,8 @@ fun MonitorScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp),
-                enabled = !viewState.isSocketActive // Can only force check if socket is not active
+                // CRITICAL: Can only force check if socket is not active AND monitor isn't busy.
+                enabled = !viewState.isSocketActive && !viewState.isChecking
             ) {
                 Text("Force Check Now")
             }
@@ -121,7 +131,7 @@ fun MonitorScreen(
             text = if (viewState.isSocketActive) {
                 "Socket.IO is CONNECTED. Background monitoring is PAUSED to save battery."
             } else {
-                "Socket.IO is IDLE. Background monitoring is RUNNING with backoff."
+                "Socket.IO is IDLE. Background monitoring is RUNNING with exponential backoff." // Added 'exponential' for clarity
             },
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier

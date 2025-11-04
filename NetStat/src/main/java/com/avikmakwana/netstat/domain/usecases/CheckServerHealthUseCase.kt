@@ -8,6 +8,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
+import java.net.SocketTimeoutException // Added for explicit documentation
 
 /**
  * MANDATE: The pure domain contract for checking server health and measuring latency.
@@ -15,14 +16,15 @@ import javax.inject.Singleton
 interface CheckServerHealthUseCase {
     /**
      * Executes a lightweight HEAD request to the configured health check URL.
-     * @return The measured Round Trip Time (RTT) in milliseconds, or 0 if a definitive error occurred.
+     * @return The measured Round Trip Time (RTT) in milliseconds.
+     * Returns 0L if a definitive network/timeout error occurred or a non-2xx response was received.
      */
     suspend operator fun invoke(): Long
 }
 
 /**
  * Implementation of the server health check, enforcing Thread Confinement.
- * It measures RTT and reports 0 on failure for consistent error handling by the [GlobalStatusMonitor].
+ * It measures RTT and reports 0L on failure for consistent error handling by the [GlobalStatusMonitor].
  */
 @Singleton
 class CheckServerHealthUseCaseImpl @Inject constructor(
@@ -38,8 +40,10 @@ class CheckServerHealthUseCaseImpl @Inject constructor(
         try {
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "HEAD"
-            connection.connectTimeout = config.healthCheckTimeout.inWholeMilliseconds.toInt()
-            connection.readTimeout = config.healthCheckTimeout.inWholeMilliseconds.toInt()
+            // Use the centralized healthCheckTimeout for both connection establishment and reading.
+            val timeoutMs = config.healthCheckTimeout.inWholeMilliseconds.toInt()
+            connection.connectTimeout = timeoutMs
+            connection.readTimeout = timeoutMs
 
             connection.connect()
 
@@ -50,14 +54,20 @@ class CheckServerHealthUseCaseImpl @Inject constructor(
             val isSuccessful = connection.responseCode in 200..299
 
             if (isSuccessful) {
+                // SUCCESS: Return the measured latency
                 return@withContext latency
             } else {
-                // Failure: Server responded, but with an error status (e.g., 500, 404).
-                // Report 0 to signal an error state.
+                // FAILURE (Server Error): Server responded, but with an error status (e.g., 500, 404).
+                // Report 0L to signal an error state.
                 return@withContext 0L
             }
+        } catch (e: SocketTimeoutException) {
+            // FAILURE (Timeout): Connection exceeded the health check limit.
+            // Report 0L.
+            return@withContext 0L
         } catch (e: Exception) {
-            // Failure: IOException, timeout, or DNS failure (Server Unreachable).
+            // FAILURE (Network/DNS): IOException, DNS failure, or other connectivity issues.
+            // Report 0L.
             return@withContext 0L
         } finally {
             connection?.disconnect()
