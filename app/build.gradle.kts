@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.avikmakwana.networky"
-        minSdk = 24
+        minSdk = 34
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -68,5 +68,6 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     ksp(libs.androidx.hilt.compiler)
 
-    implementation(project(":NetStat"))
+//    implementation(project(":NetStat"))
+    implementation("com.avikmakwana:netstate:1.0.0")
 }
