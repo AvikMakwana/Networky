@@ -106,27 +106,6 @@ fun NetworkStatusText(netState: NetStateMonitor) {
 
 ---
 
-# 📁 Project Structure
-
-```text
-NetState/
- └── src
-     └── main
-         ├── NetStateMonitor.kt
-         ├── NetworkState.kt
-         └── NetworkType.kt
-```
-
-# 🛣 Roadmap
-
-- Add network speed estimation  
-- Add callback-based API  
-- Compose-based UI widgets  
-- Add sample app  
-- Multi-platform support  
-
----
-
 # 👨‍💻 Author
 
 **Avinash Makwana**  
