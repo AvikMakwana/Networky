@@ -117,28 +117,6 @@ NetState/
          └── NetworkType.kt
 ```
 
----
-
-# 📘 Documentation
-
-### 📄 Getting Started  
-👉 *(Create `docs/GETTING_STARTED.md`)*  
-Includes installation, setup, examples.
-
-### 🧩 Usage Guide  
-👉 *(Create `docs/USAGE.md`)*  
-Full code samples + patterns.
-
-### 🔧 API Reference  
-👉 *(Create `docs/API_REFERENCE.md`)*  
-Detailed explanation of classes & functions.
-
-### 🤝 Contributing  
-👉 *(Create `docs/CONTRIBUTING.md`)*  
-PR guidelines, structure, and roadmap.
-
----
-
 # 🛣 Roadmap
 
 - Add network speed estimation  
