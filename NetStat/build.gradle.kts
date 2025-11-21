@@ -1,10 +1,15 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.plugin)
     id("com.google.devtools.ksp")
-    id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.35.0"
 }
+
+group = "com.avikmakwana"
+version = "1.0.0"
 
 android {
     namespace = "com.avikmakwana.netstat"
@@ -32,8 +37,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
     }
 }
 
@@ -48,16 +55,42 @@ dependencies {
     ksp(libs.androidx.hilt.compiler)
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                groupId = "com.avikmakwana"
-                artifactId = "netstate"
-                version = "1.0.0"
+/**
+ * Vanniktech Maven Publish configuration for Maven Central Portal.
+ */
+mavenPublishing {
+    coordinates(
+        groupId = "com.avikmakwana",
+        artifactId = "netstate",
+        version = "1.0.0",
+    )
 
-                from(components["release"])
+    publishToMavenCentral()
+    signAllPublications()
+
+    pom {
+        name.set("NetState")
+        description.set("Android library for monitoring and observing network connectivity state.")
+        url.set("https://github.com/AvikMakwana/Networky")
+
+        licenses {
+            license {
+                name.set("Apache-2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
             }
+        }
+
+        developers {
+            developer {
+                id.set("avikmakwana")
+                name.set("Avik Makwana")
+            }
+        }
+
+        scm {
+            connection.set("scm:git:https://github.com/AvikMakwana/Networky.git")
+            developerConnection.set("scm:git:ssh://git@github.com/AvikMakwana/Networky.git")
+            url.set("https://github.com/AvikMakwana/Networky")
         }
     }
 }
