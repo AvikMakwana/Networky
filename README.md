@@ -1,28 +1,34 @@
-# 📡 NetState — Android Network Monitoring Library  
-### A Lightweight, Modern & Reactive Network State Listener for Android
+# 🌐 NetState  
+### Lightweight, Modern & Reactive Android Network Monitoring Library
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.avikmakwana/netstate)](https://central.sonatype.com/artifact/com.avikmakwana/netstate)
-[![Kotlin](https://img.shields.io/badge/Kotlin-100%25-blue?logo=kotlin)](https://kotlinlang.org/)
-[![Android](https://img.shields.io/badge/Android-Network%20Monitoring-green?logo=android)]()
+<div align="center">
+  
+![Maven Central](https://img.shields.io/maven-central/v/com.avikmakwana/netstate?color=brightgreen&style=for-the-badge)
+![Android](https://img.shields.io/badge/Android-Network%20Monitoring-green?style=for-the-badge&logo=android)
+![Kotlin](https://img.shields.io/badge/Kotlin-100%25-blue?logo=kotlin&style=for-the-badge)
+![License](https://img.shields.io/badge/License-Apache%202.0-yellow?style=for-the-badge)
 
-**NetState** is a super-lightweight, plug-and-play Android library that helps you easily detect **online/offline status**, **network type**, and **real-time connectivity changes** with clean & modern Kotlin APIs.
-
----
-
-## 🚀 Features
-
-✔ Detect internet on/off status in real time  
-✔ Observe network connectivity as **Flow**  
-✔ Check WiFi / Mobile data / No internet  
-✔ Zero boilerplate — easy integration  
-✔ Works with all API levels  
-✔ Small size, fast, clean  
+</div>
 
 ---
 
-## 📦 Installation
+## ✨ What is NetState?
 
-Add this to your **module** `build.gradle`:
+**NetState** is a blazing-fast, tiny, lifecycle-aware Android library that helps developers detect:
+
+- 🌐 **Real-time Internet On/Off**
+- 📶 **Network Type** (WiFi / Mobile / None)
+- ⚡ **Instant Connectivity State**
+- 🌀 **Reactive Flows for network events**
+- 🔥 Zero-boilerplate, tiny footprint, production ready
+
+Designed with modern Android development practices using **Kotlin**, **Coroutines**, **Flow**, and **Clean Architecture**.
+
+---
+
+# 📦 Installation
+
+Add this to your **module-level** `build.gradle`:
 
 ```kotlin
 dependencies {
