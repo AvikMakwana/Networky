@@ -32,7 +32,7 @@ Add this to your **module-level** `build.gradle`:
 
 ```kotlin
 dependencies {
-    implementation("com.avikmakwana:netstate:1.0.0")
+    implementation("com.avikmakwana:netstate:1.0.1")
 }
 ```
 
