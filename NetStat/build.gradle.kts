@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.avikmakwana"
-version = "1.0.0"
+version = "1.0.1"
 
 android {
     namespace = "com.avikmakwana.netstat"
@@ -18,7 +18,7 @@ android {
     }
 
     defaultConfig {
-        minSdk = 34
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -62,7 +62,7 @@ mavenPublishing {
     coordinates(
         groupId = "com.avikmakwana",
         artifactId = "netstate",
-        version = "1.0.0",
+        version = "1.0.1",
     )
 
     publishToMavenCentral()
